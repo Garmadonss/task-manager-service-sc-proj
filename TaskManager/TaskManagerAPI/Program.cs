@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace TaskManagerAPI
 {
@@ -13,6 +16,28 @@ namespace TaskManagerAPI
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddDataProtection();
+
+
+            // Auth
+            builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme);
+            builder.Services.AddAuthorizationBuilder();
+
+
+            // DB Context
+            builder.Services.AddDbContext<TaskManagerDBContext>(options => options.UseSqlServer(
+                "Data Source=localhost;" +
+                "Initial Catalog=TaskManager;" +
+                "User id=taskmng;" +
+                "Password=sasaVV0595;" +
+                "Encrypt=True;" + 
+                "TrustServerCertificate=True")
+            );
+
+            builder.Services.AddIdentityCore<TaskManagerUser>()
+                .AddEntityFrameworkStores<TaskManagerDBContext>()
+                .AddApiEndpoints();
+
 
             var app = builder.Build();
 
@@ -26,11 +51,19 @@ namespace TaskManagerAPI
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+            app.MapIdentityApi<TaskManagerUser>();
 
 
             app.MapControllers();
 
             app.Run();
         }
+    }
+
+    class TaskManagerUser : IdentityUser { }
+
+    class TaskManagerDBContext : IdentityDbContext<TaskManagerUser>
+    {
+        public TaskManagerDBContext(DbContextOptions<TaskManagerDBContext> options) : base(options) { }
     }
 }
