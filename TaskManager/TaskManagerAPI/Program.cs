@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using TaskManagerShared;
 
 namespace TaskManagerAPI
 {
@@ -58,12 +58,5 @@ namespace TaskManagerAPI
 
             app.Run();
         }
-    }
-
-    class TaskManagerUser : IdentityUser { }
-
-    class TaskManagerDBContext : IdentityDbContext<TaskManagerUser>
-    {
-        public TaskManagerDBContext(DbContextOptions<TaskManagerDBContext> options) : base(options) { }
     }
 }

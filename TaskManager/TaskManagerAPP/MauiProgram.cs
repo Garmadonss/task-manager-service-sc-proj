@@ -27,6 +27,9 @@ namespace TaskManagerAPP
             builder.Services.AddTransient<DetailPage>();
             builder.Services.AddTransient<DetailViewModel>();
 
+            builder.Services.AddSingleton<LoginPage>();
+            builder.Services.AddSingleton<LoginViewModel>();
+
 
 
 
