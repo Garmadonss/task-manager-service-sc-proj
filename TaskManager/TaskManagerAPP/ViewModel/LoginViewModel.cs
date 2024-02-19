@@ -1,26 +1,27 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Maui.Networking;
-using System.Collections.ObjectModel;
-using System.Windows.Input;
+using TaskManagerAPP.Client;
 
 namespace TaskManagerAPP.ViewModel
 {
     public partial class LoginViewModel : BaseViewModel
     {
         [ObservableProperty]
-        string userName;
+        string email;
         
         [ObservableProperty]
         string password;
 
         IConnectivity connectivity;
 
+        APIClient apiHttpClient;
+
         public LoginViewModel(IConnectivity connectivity)
         {
-            this.userName = string.Empty;
+            this.email = string.Empty;
             this.password = string.Empty;
             this.connectivity = connectivity;
+            this.apiHttpClient = new APIClient(); // TODO: add configs and etc
         }
 
         [RelayCommand]
@@ -32,9 +33,19 @@ namespace TaskManagerAPP.ViewModel
                 return;
             }
 
+            try
+            {
+                var accessTokenResponse = await apiHttpClient.LoginAsync(Email, Password);
 
-            App.Current.MainPage.DisplayAlert($"Hi {UserName} {Password}", "", "OK");
+                await Shell.Current.DisplayAlert($"Acess Token Response {accessTokenResponse.AccessToken} {Email} {Password}", "", "OK");
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Oooops", "Something went wrong", "OK");
+
+
+                var a = ex.Message;
+            }
         }
-
     }
 }

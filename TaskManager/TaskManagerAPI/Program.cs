@@ -11,8 +11,8 @@ namespace TaskManagerAPI
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddNewtonsoftJson();
+            
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -25,6 +25,8 @@ namespace TaskManagerAPI
 
 
             // DB Context
+
+            // TODO: DEV/PROD Configs
             builder.Services.AddDbContext<TaskManagerDBContext>(options => options.UseSqlServer(
                 "Data Source=localhost;" +
                 "Initial Catalog=TaskManager;" +

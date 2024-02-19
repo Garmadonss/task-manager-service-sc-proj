@@ -17,7 +17,7 @@
         <Label Grid.Row="2" Text="Please sign in to continue" HorizontalOptions="Center"></Label>
 
         <VerticalStackLayout Grid.Row="3" HorizontalOptions="FillAndExpand">
-            <Entry Text="{Binding UserName}" Placeholder="Username" HorizontalOptions="FillAndExpand" Margin="10"></Entry>
+            <Entry Text="{Binding Email}" Placeholder="Username" HorizontalOptions="FillAndExpand" Margin="10"></Entry>
             <Entry Text="{Binding Password}" Placeholder="Password" HorizontalOptions="FillAndExpand" Margin="10"></Entry>
             <Button Text="Sign in" Command="{Binding LoginCommand}"></Button>
         </VerticalStackLayout>        

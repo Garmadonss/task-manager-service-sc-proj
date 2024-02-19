@@ -9,7 +9,7 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "TaskManagerDB", "TaskManage
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskManagerAPP", "TaskManagerAPP\TaskManagerAPP.csproj", "{61B6BC47-C9B5-401E-A69C-53A3DB36BA5F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagerShared", "TaskManagerShared\TaskManagerShared.csproj", "{401857A3-08A8-4CD7-8788-2668A3027B3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskManagerShared", "TaskManagerShared\TaskManagerShared.csproj", "{401857A3-08A8-4CD7-8788-2668A3027B3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
