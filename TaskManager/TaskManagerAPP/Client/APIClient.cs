@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaskManagerAPP.Client;
-using TaskManagerAPP.Client.NewFolder;
+﻿using TaskManagerAPP.Client.NewFolder;
 using TaskManagerAPP.Client.Requests;
 
 namespace TaskManagerAPP.Client
@@ -23,8 +17,25 @@ namespace TaskManagerAPP.Client
 
             var response = await apiHttpClient.PostAsync(baseUri + "/login", loginRequest);            
 
-            return response;
+            return response.Response;
         }
 
+        public async Task<bool> RegisterAsync(string email, string password)
+        {
+            var apiHttpClient = new APIHttpClient<RegisterRequest, bool>();
+
+            var registerRequest = new RegisterRequest();
+            registerRequest.Email = email;
+            registerRequest.Password = password;
+
+            var response = await apiHttpClient.PostAsync(baseUri + "/register", registerRequest);
+
+            return response.Response;
+        }
+
+        private void ValidateResponse()
+        {
+
+        }
     }
 }

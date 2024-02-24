@@ -30,7 +30,8 @@ namespace TaskManagerAPP
             builder.Services.AddSingleton<LoginPage>();
             builder.Services.AddSingleton<LoginViewModel>();
 
-
+            builder.Services.AddSingleton<RegistrationPage>();
+            builder.Services.AddSingleton<RegistrationViewModel>();
 
 
 #if DEBUG

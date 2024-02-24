@@ -12,7 +12,7 @@ namespace TaskManagerAPP.ViewModel
         [ObservableProperty]
         string password;
 
-        IConnectivity connectivity;
+        IConnectivity connectivity;       
 
         APIClient apiHttpClient;
 
@@ -20,7 +20,7 @@ namespace TaskManagerAPP.ViewModel
         {
             this.email = string.Empty;
             this.password = string.Empty;
-            this.connectivity = connectivity;
+            this.connectivity = connectivity;            
             this.apiHttpClient = new APIClient(); // TODO: add configs and etc
         }
 
@@ -46,6 +46,13 @@ namespace TaskManagerAPP.ViewModel
 
                 var a = ex.Message;
             }
+        }
+
+        [RelayCommand]
+        private async Task ToRegistrationPage(object sender)
+        {
+            await Shell.Current.GoToAsync(nameof(RegistrationPage));
+
         }
     }
 }

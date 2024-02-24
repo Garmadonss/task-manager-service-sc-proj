@@ -6,7 +6,9 @@
         {
             InitializeComponent();
 
-            Routing.RegisterRoute(nameof(DetailPage), typeof(DetailPage));
+            Routing.RegisterRoute(nameof(MainPage), typeof(MainPage));
+            Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
+            Routing.RegisterRoute(nameof(RegistrationPage), typeof(RegistrationPage));
         }
     }
 }
