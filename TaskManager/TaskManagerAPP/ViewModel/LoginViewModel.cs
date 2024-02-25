@@ -37,7 +37,7 @@ namespace TaskManagerAPP.ViewModel
             {
                 var accessTokenResponse = await apiHttpClient.LoginAsync(Email, Password);
 
-                await Shell.Current.DisplayAlert($"Acess Token Response {accessTokenResponse.AccessToken} {Email} {Password}", "", "OK");
+                await Shell.Current.DisplayAlert($"Acess Token Response {accessTokenResponse.Response.AccessToken} {Email} {Password}", "", "OK");
             }
             catch (Exception ex)
             {

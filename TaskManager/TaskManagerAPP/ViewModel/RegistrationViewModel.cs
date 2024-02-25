@@ -43,21 +43,28 @@ namespace TaskManagerAPP.ViewModel
                 return;
             }
 
+            if (!await Validate()) return;
 
             try
-            {
-                var accessTokenResponse = await apiHttpClient.RegisterAsync(Email, Password);
+            {               
+                var aPIResponse = await apiHttpClient.RegisterAsync(Email, Password);
 
-                await Shell.Current.DisplayAlert($"Nya", "", "OK");
+                if (aPIResponse.Sucessfull)
+                {
+                    return;
+                }
+                else
+                {
+                    await Shell.Current.DisplayAlert($"{aPIResponse?.ErrorDetails?.First().Value}", "", "OK");
+                }
+                
             }
             catch (Exception ex)
             {
                 await Shell.Current.DisplayAlert("Oooops", "Something went wrong", "OK");
 
-
                 var a = ex.Message;
             }
-
         }
 
         private async Task<bool> Validate() { 
