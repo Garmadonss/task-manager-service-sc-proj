@@ -35,9 +35,16 @@ namespace TaskManagerAPP.ViewModel
 
             try
             {
-                var accessTokenResponse = await apiHttpClient.LoginAsync(Email, Password);
+                var aPIResponse = await apiHttpClient.LoginAsync(Email, Password);
 
-                await Shell.Current.DisplayAlert($"Acess Token Response {accessTokenResponse.Response.AccessToken} {Email} {Password}", "", "OK");
+                if (aPIResponse.Sucessfull)
+                {
+                    await Shell.Current.GoToAsync(nameof(MainPage));
+                }
+                else
+                {
+                    await Shell.Current.DisplayAlert($"Failed to login", "Please try again", "OK");
+                }
             }
             catch (Exception ex)
             {

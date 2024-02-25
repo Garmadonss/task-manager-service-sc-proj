@@ -51,13 +51,13 @@ namespace TaskManagerAPP.ViewModel
 
                 if (aPIResponse.Sucessfull)
                 {
-                    return;
+                    await Shell.Current.DisplayAlert($"You have been successfully registered", "", "Back to login page");
+                    await Shell.Current.GoToAsync(nameof(LoginPage));
                 }
                 else
                 {
                     await Shell.Current.DisplayAlert($"{aPIResponse?.ErrorDetails?.First().Value}", "", "OK");
-                }
-                
+                }                               
             }
             catch (Exception ex)
             {
@@ -69,7 +69,7 @@ namespace TaskManagerAPP.ViewModel
 
         private async Task<bool> Validate() { 
 
-            if (password != passwordRepeated)
+            if (Password != PasswordRepeated)
             {
                 await Shell.Current.DisplayAlert($"Passwords do not match", "", "OK");
                 return false;

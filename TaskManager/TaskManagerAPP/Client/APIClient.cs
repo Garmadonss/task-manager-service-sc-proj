@@ -1,4 +1,4 @@
-﻿using TaskManagerAPP.Client.NewFolder;
+﻿using TaskManagerAPP.Client.Request;
 using TaskManagerAPP.Client.Requests;
 using TaskManagerAPP.Client.Response;
 
@@ -34,6 +34,20 @@ namespace TaskManagerAPP.Client
             var postResponse = await apiHttpClient.PostAsync(baseUri + "/register", registerRequest);
 
             var response = ParseResponse<bool>(postResponse);
+
+            return response;
+        }
+
+        public async Task<APIResponse<AccessTokenResponse>> RefreshTokenAsync(string refreshToken)
+        {
+            var apiHttpClient = new APIHttpClient<RefreshTokenRequest, AccessTokenResponse>();
+
+            var refreshTokenRequest = new RefreshTokenRequest();            
+            refreshTokenRequest.RefreshToken = refreshToken;
+
+            var postResponse = await apiHttpClient.PostAsync(baseUri + "/refresh", refreshTokenRequest);
+
+            var response = ParseResponse<AccessTokenResponse>(postResponse);
 
             return response;
         }

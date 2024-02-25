@@ -8,9 +8,9 @@
     Title="TaskManagerAPP">
 
     <ShellContent
-        Title="Home"
+        Title="LoginPage"
         ContentTemplate="{DataTemplate local:LoginPage}"
-        Route="MainPage" 
+        Route="LoginPage" 
     />
 
 </Shell>
