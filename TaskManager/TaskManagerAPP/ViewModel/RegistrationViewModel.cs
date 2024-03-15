@@ -22,15 +22,15 @@ namespace TaskManagerAPP.ViewModel
 
         IConnectivity connectivity;
 
-        APIClient apiHttpClient;
+        APIClient apiClient;
 
-        public RegistrationViewModel(IConnectivity connectivity)
+        public RegistrationViewModel(IConnectivity connectivity, APIClient apiClient)
         {
             this.email = string.Empty;
             this.password = string.Empty;
             this.passwordRepeated = string.Empty;
             this.connectivity = connectivity;
-            this.apiHttpClient = new APIClient(); // TODO: add configs and etc
+            this.apiClient = apiClient;
         }
 
         [RelayCommand]
@@ -47,7 +47,7 @@ namespace TaskManagerAPP.ViewModel
 
             try
             {               
-                var aPIResponse = await apiHttpClient.RegisterAsync(Email, Password);
+                var aPIResponse = await apiClient.RegisterAsync(Email, Password);
 
                 if (aPIResponse.Sucessfull)
                 {

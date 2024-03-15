@@ -14,16 +14,16 @@ namespace TaskManagerAPP.ViewModel
 
         IConnectivity connectivity;       
 
-        APIClient apiHttpClient;
+        APIClient apiClient;
 
-        public LoginViewModel(IConnectivity connectivity)
+        public LoginViewModel(IConnectivity connectivity, APIClient apiClient)
         {
             this.email = string.Empty;
             this.password = string.Empty;
-            this.connectivity = connectivity;            
-            this.apiHttpClient = new APIClient(); // TODO: add configs and etc
+            this.connectivity = connectivity;
+            this.apiClient = apiClient;
         }
-
+                
         [RelayCommand]
         private async Task Login(object sender)
         {
@@ -35,7 +35,7 @@ namespace TaskManagerAPP.ViewModel
 
             try
             {
-                var aPIResponse = await apiHttpClient.LoginAsync(Email, Password);
+                var aPIResponse = await apiClient.LoginAsync(Email, Password);
 
                 if (aPIResponse.Sucessfull)
                 {

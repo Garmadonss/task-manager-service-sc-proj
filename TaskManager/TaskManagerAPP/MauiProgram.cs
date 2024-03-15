@@ -1,6 +1,7 @@
 ﻿using TaskManagerAPP.ViewModel;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using TaskManagerAPP.Client;
 
 namespace TaskManagerAPP
 {
@@ -17,7 +18,8 @@ namespace TaskManagerAPP
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            builder.Services.AddSingleton<IConnectivity>(Connectivity.Current);
+            builder.Services.AddSingleton<IConnectivity>(Connectivity.Current);           
+            builder.Services.AddSingleton(new APIClient());
 
 
             builder.Services.AddSingleton<MainPage>();

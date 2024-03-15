@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TaskManagerAPP.Client.Response
 {
-    internal class APIHttpClientResponse<TResponse>
+    public class APIHttpClientResponse<TResponse>
     {
         public HttpStatusCode HttpStatusCode { get; set; }
         public TResponse? Response { get; set; }

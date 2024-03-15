@@ -1,4 +1,6 @@
-﻿using TaskManagerAPP.Client.Request;
+﻿using Newtonsoft.Json;
+using System.Text;
+using TaskManagerAPP.Client.Request;
 using TaskManagerAPP.Client.Requests;
 using TaskManagerAPP.Client.Response;
 
@@ -8,15 +10,60 @@ namespace TaskManagerAPP.Client
     {
         private static string baseUri = DeviceInfo.Platform == DevicePlatform.Android ? "https://10.0.2.2:443" : "https://localhost:443";
 
+        private readonly HttpClient httpClient;      
+
+        public APIClient()
+        {
+            this.httpClient = CreateHttpClient();
+        }
+
+        private HttpClient CreateHttpClient()
+        {
+            HttpClient httpClient;
+
+#if DEBUG
+            httpClient = HttpClientFactory.Create(
+                new HttpsClientHandlerService().GetPlatformMessageHandler(),
+                new TokenRefreshHandler(this)
+            );
+#else
+            httpClient = HttpClientFactory.Create(new TokenRefreshHandler(this));
+#endif
+            return httpClient;
+        }
+
+        public async Task<APIHttpClientResponse<TResponse>> PostAsync<TRequest, TResponse>(string requestUri, TRequest request)
+        {
+            var content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
+            var httpResponse = httpClient.PostAsync(requestUri, content).Result;
+
+            string responseJson = await httpResponse.Content.ReadAsStringAsync();
+
+            APIHttpClientResponse<TResponse> response = new APIHttpClientResponse<TResponse>();
+
+            response.HttpStatusCode = httpResponse.StatusCode;
+
+            try
+            {
+                httpResponse.EnsureSuccessStatusCode();
+                response.Response = JsonConvert.DeserializeObject<TResponse>(responseJson);
+            }
+            catch (Exception ex)
+            {
+                // Response contains info about the actual issues
+                response.ProblemDetails = JsonConvert.DeserializeObject<HttpValidationProblemDetails>(responseJson);
+            }
+
+            return response;
+        }
+
         public async Task<APIResponse<AccessTokenResponse>> LoginAsync(string email, string password)
         {
-            var apiHttpClient = new APIHttpClient<LoginRequest, AccessTokenResponse>();
-
             var loginRequest = new LoginRequest();
             loginRequest.Email = email; 
             loginRequest.Password = password;            
 
-            var postResponse = await apiHttpClient.PostAsync(baseUri + "/login", loginRequest);
+            var postResponse = await PostAsync<LoginRequest, AccessTokenResponse>(baseUri + "/login", loginRequest);
 
             var response = ParseResponse<AccessTokenResponse>(postResponse);
 
@@ -25,13 +72,11 @@ namespace TaskManagerAPP.Client
 
         public async Task<APIResponse<bool>> RegisterAsync(string email, string password)
         {
-            var apiHttpClient = new APIHttpClient<RegisterRequest, bool>();
-
             var registerRequest = new RegisterRequest();
             registerRequest.Email = email;
             registerRequest.Password = password;
 
-            var postResponse = await apiHttpClient.PostAsync(baseUri + "/register", registerRequest);
+            var postResponse = await PostAsync<RegisterRequest, bool>(baseUri + "/register", registerRequest);
 
             var response = ParseResponse<bool>(postResponse);
 
@@ -40,12 +85,10 @@ namespace TaskManagerAPP.Client
 
         public async Task<APIResponse<AccessTokenResponse>> RefreshTokenAsync(string refreshToken)
         {
-            var apiHttpClient = new APIHttpClient<RefreshTokenRequest, AccessTokenResponse>();
-
             var refreshTokenRequest = new RefreshTokenRequest();            
             refreshTokenRequest.RefreshToken = refreshToken;
 
-            var postResponse = await apiHttpClient.PostAsync(baseUri + "/refresh", refreshTokenRequest);
+            var postResponse = await PostAsync<RefreshTokenRequest, AccessTokenResponse>(baseUri + "/refresh", refreshTokenRequest);
 
             var response = ParseResponse<AccessTokenResponse>(postResponse);
 
