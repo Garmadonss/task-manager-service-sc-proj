@@ -32,7 +32,7 @@ namespace TaskManagerAPI
                 "Initial Catalog=TaskManager;" +
                 "User id=taskmng;" +
                 "Password=sasaVV0595;" +
-                "Encrypt=True;" + 
+                "Encrypt=True;" +
                 "TrustServerCertificate=True")
             );
 

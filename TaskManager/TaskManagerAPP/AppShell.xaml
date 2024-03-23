@@ -11,19 +11,6 @@
         Title="LoginPage"
         ContentTemplate="{DataTemplate local:LoginPage}"
         Route="LoginPage" 
-    />
-
-    <TabBar>
-        <ShellContent
-            Title="Profile"
-            ContentTemplate="{DataTemplate local:Profile}"
-            Route="Profile" 
-        />        
-        <ShellContent
-            Title="MainPage"
-            ContentTemplate="{DataTemplate local:MainPage}"
-            Route="MainPage" 
-        />
-    </TabBar>
+    />  
 
 </Shell>

@@ -1,10 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using TaskManagerAPP.Client;
+using TaskManagerShared.Client;
+
 
 namespace TaskManagerAPP.ViewModel
 {
-    public partial class LoginViewModel : BaseViewModel
+    public partial class LoginViewModel : ObservableObject
     {
         [ObservableProperty]
         string email;
@@ -16,12 +17,15 @@ namespace TaskManagerAPP.ViewModel
 
         APIClient apiClient;
 
-        public LoginViewModel(IConnectivity connectivity, APIClient apiClient)
+        public SecureStorageBearerTokenProvider tokenProvider;
+
+        public LoginViewModel(IConnectivity connectivity, APIClient apiClient, SecureStorageBearerTokenProvider tokenProvider)
         {
             this.email = string.Empty;
             this.password = string.Empty;
             this.connectivity = connectivity;
             this.apiClient = apiClient;
+            this.tokenProvider = tokenProvider;            
         }
                 
         [RelayCommand]
@@ -37,8 +41,15 @@ namespace TaskManagerAPP.ViewModel
             {
                 var aPIResponse = await apiClient.LoginAsync(Email, Password);
 
+                var aa = tokenProvider.GetAccessToken();
+                var bb = tokenProvider.GetRefreshToken();
+
+
                 if (aPIResponse.Sucessfull)
                 {
+                    tokenProvider.StoreAccessToken(aPIResponse.Response.AccessToken);
+                    tokenProvider.StoreRefreshToken(aPIResponse.Response.RefreshToken);
+
                     await Shell.Current.GoToAsync(nameof(MainPage));
                 }
                 else
@@ -60,6 +71,12 @@ namespace TaskManagerAPP.ViewModel
         {
             await Shell.Current.GoToAsync(nameof(RegistrationPage));
 
+        }
+
+        [RelayCommand]
+        private async Task ToMainPage(object sender)
+        {
+            await Shell.Current.GoToAsync(nameof(MainPage));
         }
     }
 }

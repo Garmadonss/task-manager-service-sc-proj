@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mi="http://www.aathifmahir.com/dotnet/2022/maui/icons"
+             x:Class="TaskManagerAPP.EditTaskPage"
+             xmlns:viewmodel="clr-namespace:TaskManagerAPP.ViewModel"
+             x:DataType="viewmodel:TaskViewModel"
+             Title="Edit Task">
+    <StackLayout Margin="20" Spacing="20" VerticalOptions="StartAndExpand">
+        <StackLayout>
+            <StackLayout>
+                <HorizontalStackLayout Spacing="10">
+                    <Label FontSize="20" Text="Task" FontAttributes="Bold"/>
+                    <mi:MauiIcon Icon="{mi:Fluent AppsList20}"/>
+                </HorizontalStackLayout>
+
+                <Frame Padding="7" Margin="0,10,0,0" HorizontalOptions="FillAndExpand" CornerRadius="10">
+                    <StackLayout>
+                        <Entry x:Name="TitleField" Margin="0,0,0,0" Placeholder="Task title" Text="{Binding Title}" FontFamily="Inter-Regular" PlaceholderColor="Gray" ReturnType="Next"/>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+        </StackLayout>
+
+        <StackLayout>
+            <HorizontalStackLayout Spacing="10">
+                <Label FontSize="20" Text="Description" FontFamily="Bold" />
+                <mi:MauiIcon Icon="{mi:Fluent GroupList20}"/>
+            </HorizontalStackLayout>
+
+            <Frame Padding="5" Margin="0,10,0,0" HorizontalOptions="FillAndExpand" CornerRadius="10">
+                <Editor x:Name="DescField" Placeholder="Task Description" Text="{Binding Description}" HeightRequest="100" HorizontalTextAlignment="Start" VerticalTextAlignment="Start" PlaceholderColor="Grey" />
+            </Frame>
+        </StackLayout>
+
+        <StackLayout>
+            <HorizontalStackLayout Spacing="10">
+                <Label FontSize="20" Text="Task Priority" FontFamily="Inter-SemiBold"/>
+                <mi:MauiIcon Icon="{mi:Fluent BookExclamationMark20}"/>
+            </HorizontalStackLayout>
+
+            <Frame Padding="10" Margin="0,10,0,0" CornerRadius="10">
+                <Picker Title="Select priority" ItemsSource="{Binding availablePriorities}" ItemDisplayBinding="{Binding .}" SelectedItem="{Binding Priority}" />
+            </Frame>
+        </StackLayout>
+
+        <StackLayout>
+            <HorizontalStackLayout Spacing="10">
+                <Label FontSize="20" Text="Due Date" FontFamily="Bold" />
+                <mi:MauiIcon Icon="{mi:Fluent Alert20}"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Spacing="10">
+                <DatePicker HorizontalOptions="Center" Date="{Binding DeadlineDate}"></DatePicker>
+                <TimePicker HorizontalOptions="Center" Time="{Binding DeadlineTime}"></TimePicker>
+            </HorizontalStackLayout>
+        </StackLayout>
+
+        <StackLayout>
+            <HorizontalStackLayout Spacing="10">
+                <Label FontSize="20" Text="Completed" VerticalOptions="Center" FontFamily="Inter-SemiBold"/>
+                <Switch IsToggled="{Binding Done}" VerticalOptions="Center"/>
+            </HorizontalStackLayout>            
+        </StackLayout>
+
+        <BoxView HeightRequest="1" Color="Gray" Margin="0,-10,0,0"/>
+
+        <Grid ColumnSpacing="20" RowSpacing="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Row="0" Grid.Column="0" BackgroundColor="BlueViolet"  Text="Save" Command="{Binding EditTaskCommand}" FontFamily="Inter-Regular"/>
+            <Button Grid.Row="0" Grid.Column="1" BackgroundColor="Grey" Text="Cancel" Command="{Binding CancelCommand}" FontFamily="Inter-Regular"/>
+        </Grid>
+    </StackLayout>
+</ContentPage>

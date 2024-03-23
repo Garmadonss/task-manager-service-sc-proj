@@ -1,68 +1,104 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:mi="http://www.aathifmahir.com/dotnet/2022/maui/icons"
              x:Class="TaskManagerAPP.MainPage"
-             xmlns:viewmodel="clr-namespace:TaskManagerAPP.ViewModel"
-             x:DataType="viewmodel:MainViewModel">
+             xmlns:viewmodel="clr-namespace:TaskManagerAPP.ViewModel"             
+             x:DataType="viewmodel:MainViewModel">    
 
-    <Grid RowDefinitions="100, Auto, *"
-      ColumnDefinitions=".75*, .25*"
-      Padding="10"
+    <Grid
+      Padding="5"
       RowSpacing="10"
       ColumnSpacing="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />            
+            <RowDefinition Height="*" />            
+        </Grid.RowDefinitions>
 
-        <Image Grid.ColumnSpan="2"
-           Source="task1.png"
-           BackgroundColor="Transparent"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width=".75*"/>
+            <ColumnDefinition Width=".25*"/>
+        </Grid.ColumnDefinitions>
 
-        <Entry Placeholder="Enter task"
-           Text="{Binding Text}"
-           Grid.Row="1"/>
+        <SearchBar HorizontalOptions="Fill" Grid.Row="0" Grid.Column="0"  Text="{Binding SearchText}" TextChanged="SearchBar_TextChanged" Placeholder="Search" x:Name="SearchBar" SearchCommand="{Binding SearchRefreshCommand}"/>
+        <ImageButton Grid.Row="0" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center" Source="{mi:Fluent Add28}" Command="{Binding AddNewTaskCommand}"></ImageButton>
 
-        <Button Text="Add"
-            Command="{Binding AddCommand}"
-            Grid.Row="1"
-            Grid.Column="1"/>
+        <RefreshView Grid.Row="1" Grid.ColumnSpan="2" Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
+            <CollectionView ItemsSource="{Binding Tasks}" SelectionMode="Single" SelectedItem="{Binding SelectedTask}" SelectionChanged="CollectionView_SelectionChanged" VerticalOptions="FillAndExpand" RemainingItemsThreshold="1" RemainingItemsThresholdReachedCommand="{Binding LoadNextPageCommand}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical"
+                                   SnapPointsType="MandatorySingle"
+                                   SnapPointsAlignment="Start" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="viewmodel:TaskViewModel">
+                        <Border Padding="5,0,0,10" Margin="5" StrokeShape="RoundRectangle 40,40,40,40">
+                                <Grid RowSpacing="0" ColumnSpacing="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="35" />
+                                        <RowDefinition Height="30" />
+                                        <RowDefinition Height="20" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
 
-        <Button Text="Info"
-            WidthRequest="90"
-            HeightRequest="70"
-            FontSize="20"
-            Grid.Row="0"
-            Grid.Column="1"/>
+                                <Label Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="20,0,0,0" HorizontalOptions="StartAndExpand" VerticalOptions="End" Text="{Binding Title}" LineBreakMode="TailTruncation" FontSize="20" FontFamily="Inter-Bold" />
 
-        <CollectionView Grid.Row="2" Grid.ColumnSpan="2"
-                    ItemsSource="{Binding Items}"
-                    SelectionMode="None">
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="{x:Type x:String}">
-                    <SwipeView>
-                        <SwipeView.RightItems>
-                            <SwipeItems>
-                                <SwipeItem Text="Delete"
-                                       BackgroundColor="Red"
-                                       Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}},Path=DeleteCommand}"
-                                       CommandParameter="{Binding .}"/>
-                            </SwipeItems>
-                        </SwipeView.RightItems>
-                        <Grid Padding="0,5">
-                            <Frame>
-                                <Frame.GestureRecognizers>
-                                    <TapGestureRecognizer 
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}},Path=TapCommand}"
-                                    CommandParameter="{Binding .}"/>
-                                </Frame.GestureRecognizers>
-                                <Label Text="{Binding .}"
-                                   FontSize="24"/>
-                            </Frame>
-                        </Grid>
-                    </SwipeView>
-                </DataTemplate>
+                                <CheckBox Grid.Row="1" Grid.Column="0" Margin="-6,0,0,0" Color="Green" x:Name="IsDone" IsEnabled="False" IsChecked="{Binding Done}">
+                                    <!-- <CheckBox.Behaviors> -->
+                                    <!-- <toolkit:EventToCommandBehavior -->
+                                    <!-- Command="{Binding UpdateDoneCommand}" -->
+                                    <!-- CommandParameter="{Binding Done}" -->
+                                    <!-- EventName="CheckedChanged" /> -->
+                                    <!-- </CheckBox.Behaviors> -->
+                                </CheckBox>
 
-            </CollectionView.ItemTemplate>
+                                <Label Grid.ColumnSpan="5" Grid.Row="2" Grid.Column="1" HorizontalOptions="StartAndExpand" LineBreakMode="TailTruncation" Margin="20,2,0,0" VerticalOptions="Start" FontSize="Body" WidthRequest="250" Text="{Binding Description}" FontFamily="Inter-Regular" />
 
-        </CollectionView>
+                                <Frame Grid.Row="1" Grid.Column="1" WidthRequest="100" Padding="7,0,0,0" Margin="-10,0,0,0" HeightRequest="25" BackgroundColor="Gray" BorderColor="Transparent">
+                                    <Label HorizontalOptions="StartAndExpand" VerticalOptions="Center" WidthRequest="90" TextColor="Black" FontFamily="Inter-Regular">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="{Binding deadline, StringFormat='{0:MMM dd, HH:mm}'}" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </Frame>
 
+                                <Frame Grid.Row="1" Grid.Column="2" WidthRequest="70" Padding="0,0,0,0" Margin="0,0,0,0" HeightRequest="25" BorderColor="Transparent">
+                                    <Frame.Triggers>
+
+                                        <DataTrigger TargetType="Frame" Binding="{Binding Priority}" Value="2">
+                                            <Setter Property="BackgroundColor" Value="Red" />
+                                        </DataTrigger>
+
+                                        <DataTrigger TargetType="Frame" Binding="{Binding Priority}" Value="1">
+                                            <Setter Property="BackgroundColor" Value="Yellow" />
+                                        </DataTrigger>
+
+                                        <DataTrigger TargetType="Frame" Binding="{Binding Priority}" Value="0">
+                                            <Setter Property="BackgroundColor" Value="Green" />
+                                        </DataTrigger>                                    
+                                    </Frame.Triggers>
+                                    <Label HorizontalOptions="Center" VerticalOptions="Center" TextColor="Black" FontFamily="Inter-Regular" Text="{Binding Priority}">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding Priority}" Value="0">
+                                                <Setter Property="TextColor" Value="White" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                </Frame>
+                            </Grid>
+                            </Border>                   
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>        
     </Grid>
-
 </ContentPage>
