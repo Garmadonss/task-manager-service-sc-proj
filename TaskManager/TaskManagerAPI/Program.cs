@@ -25,13 +25,11 @@ namespace TaskManagerAPI
 
 
             // DB Context
-
-            // TODO: DEV/PROD Configs
             builder.Services.AddDbContext<TaskManagerDBContext>(options => options.UseSqlServer(
-                "Data Source=localhost;" +
-                "Initial Catalog=TaskManager;" +
-                "User id=taskmng;" +
-                "Password=sasaVV0595;" +
+                "Data Source=" + builder.Configuration["TaskManagerDBContext:DataSource"] + ";" +
+                "Initial Catalog=" + builder.Configuration["TaskManagerDBContext:InitialCatalog"] + ";" +
+                "User id=" + builder.Configuration["TaskManagerDBContext:UserId"] + ";" +
+                "Password=" + builder.Configuration["TaskManagerDBContext:Password"] + ";" +
                 "Encrypt=True;" +
                 "TrustServerCertificate=True")
             );

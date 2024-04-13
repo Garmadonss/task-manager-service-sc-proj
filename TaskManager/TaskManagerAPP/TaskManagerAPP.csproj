@@ -35,6 +35,7 @@
 	  <ApplicationTitle>Task Manager APP</ApplicationTitle>
 	  <ApplicationId>valerijs.viskers.taskmanagerapp</ApplicationId>
 	  <RunAOTCompilation>True</RunAOTCompilation>
+	  <AndroidCreatePackagePerAbi>True</AndroidCreatePackagePerAbi>
 	</PropertyGroup>	
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
@@ -45,6 +46,7 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android34.0|AnyCPU'">
 	  <ApplicationTitle>Task Manager APP</ApplicationTitle>
 	  <ApplicationId>valerijs.viskers.taskmanagerapp</ApplicationId>
+	  <AndroidCreatePackagePerAbi>True</AndroidCreatePackagePerAbi>
 	</PropertyGroup>
 
 	<ItemGroup>
