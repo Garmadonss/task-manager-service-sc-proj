@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using Newtonsoft.Json;
+using System;
 using System.Text;
 using TaskManagerShared.Client.Request;
 using TaskManagerShared.Client.Requests;
@@ -10,13 +11,21 @@ namespace TaskManagerShared.Client
 {
     public class APIClient
     {
-        private static string baseUri = DeviceInfo.Platform == DevicePlatform.Android ? "https://10.0.2.2:443" : "https://localhost:443";
+        private string baseUri;
 
         private readonly HttpClient httpClient;      
 
-        public APIClient(IBearerTokenProvider bearerTokenProvider, HttpMessageHandler httpMessageHandler)
+        public APIClient(IBearerTokenProvider bearerTokenProvider, HttpMessageHandler httpMessageHandler, string baseUri)
         {
             this.httpClient = CreateHttpClient(bearerTokenProvider, httpMessageHandler);
+            if (baseUri.StartsWith("https://localhost"))
+            {
+                this.baseUri = DeviceInfo.Platform == DevicePlatform.Android ? "https://10.0.2.2:443" : "https://localhost:443";
+            }
+            else
+            {
+                this.baseUri = baseUri;
+            }            
         }
 
         private HttpClient CreateHttpClient(IBearerTokenProvider bearerTokenProvider, HttpMessageHandler httpMessageHandler)
